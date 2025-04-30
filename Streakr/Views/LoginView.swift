@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+    
     @State private var email = ""
     @State private var password = ""
     @State private var isLoginButtonDisabled = true
     @State private var showPassword = false
+    @State private var showToast = false
     
     var body: some View {
         ZStack {
-            
             LinearGradient(
                 gradient: Gradient(colors: [Color(.loginRed),
                                             Color(.loginGray)]),
@@ -23,9 +25,7 @@ struct LoginView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
-            
-            
-            
+
             Spacer()
             
             VStack(spacing: 20) {
@@ -47,14 +47,14 @@ struct LoginView: View {
                            placeholder: "Email",
                            icon: "envelope.fill",
                            isSecure: false)
-                .onChange(of: email, validateForm)
+                .onChange(of: email, enableButton)
                 
                 ZStack(alignment: .trailing) {
                     InputField(text: $password,
                                placeholder: "Password",
                                icon: "lock.fill",
                                isSecure: !showPassword)
-                    .onChange(of: password, validateForm)
+                    .onChange(of: password, enableButton)
                     
                     Button(action: {
                         showPassword.toggle()
@@ -75,14 +75,24 @@ struct LoginView: View {
                         Text("Forgot password?")
                             .font(.footnote)
                             .foregroundStyle(Color(.blue).opacity(0.8))
+                            .padding(.vertical, 6)
+                            .contentShape(Rectangle())
                     }
                 }
-                .padding(.top, -10)
+                .padding(.vertical, -10)
                 
                 Button(action: {
-                    
-                    //TODO Logga in
-                    
+                    Task {
+                        await authVM.signIn(email: email, password: password)
+                        
+                        if let error = authVM.errorMessage {
+                            print(error)
+                            showToast = true
+                            
+                            try? await Task.sleep(nanoseconds: 3_000_000_000)
+                            showToast = false
+                        }
+                    }
                 }) {
                     Text("Login")
                         .font(.headline)
@@ -125,11 +135,17 @@ struct LoginView: View {
             .padding(.horizontal, 25)
             
             Spacer()
+            
         }
+        .toast(isShowing: $showToast, message: authVM.errorMessage ?? "Something went wrong!")
     }
     
-    private func validateForm() {
-        isLoginButtonDisabled = email.isEmpty || password.isEmpty
+    private func isEmailValid(_ email: String) -> Bool {
+        email.contains("@") && email.contains(".")
+    }
+    
+    private func enableButton() {
+        isLoginButtonDisabled = email.isEmpty || password.isEmpty || !isEmailValid(email)
     }
 }
 
@@ -148,9 +164,11 @@ struct InputField: View {
             if isSecure {
                 SecureField(placeholder, text: $text)
                     .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled()
             } else {
                 TextField(placeholder, text: $text)
                     .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled()
                     .keyboardType(placeholder.contains("Email") ? .emailAddress : .default)
             }
         }
