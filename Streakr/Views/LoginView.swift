@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    
     @EnvironmentObject var authVM: AuthViewModel
     
     @State private var email = ""
@@ -15,6 +16,7 @@ struct LoginView: View {
     @State private var isLoginButtonDisabled = true
     @State private var showPassword = false
     @State private var showToast = false
+    @State private var showSignUpSheet = false
     
     var body: some View {
         ZStack {
@@ -114,14 +116,17 @@ struct LoginView: View {
                         .foregroundStyle(Color(.loginGray))
                     
                     Button(action: {
-                        
-                        //TODO Registrera konto View eller Sheet
+                        showSignUpSheet = true
                         
                     }) {
                         Text("Sign Up")
                             .font(.footnote.bold())
                             .underline()
                             .foregroundStyle(Color(.blue))
+                    }
+                    .sheet(isPresented: $showSignUpSheet) {
+                        SignUpView()
+                            .environmentObject(authVM)
                     }
                 }
                 

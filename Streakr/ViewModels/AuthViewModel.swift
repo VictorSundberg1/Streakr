@@ -32,6 +32,7 @@ class AuthViewModel: ObservableObject {
         isLoading = false
     }
     
+    
     func signIn(email: String, password: String) async {
         isLoading = true
         errorMessage = nil
