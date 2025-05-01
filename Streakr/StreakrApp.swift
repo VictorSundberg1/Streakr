@@ -25,7 +25,7 @@ struct StreakrApp: App {
     var body: some Scene {
         WindowGroup {
             if authVM.user != nil {
-                ContentView()
+                HomeView()
             } else {
                 LoginView()
             }
