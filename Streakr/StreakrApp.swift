@@ -20,6 +20,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct StreakrApp: App {
     @StateObject private var authVM = AuthViewModel()
+    @StateObject private var habitVM = HabitViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
@@ -31,5 +32,6 @@ struct StreakrApp: App {
             }
         }
         .environmentObject(authVM)
+        .environmentObject(habitVM)
     }
 }

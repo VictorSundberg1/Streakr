@@ -12,13 +12,26 @@ struct Habit: Identifiable, Codable {
     @DocumentID var id: String?
     var title: String
     var createdAt: Date
-    var streak: Int
-    var logs: [String]
+    var logs: [Date]
     
-    init(title: String) {
-        self.title = title
-        self.createdAt = Date()
-        self.streak = 0
-        self.logs = []
+    var streak: Int {
+        let sortedDates = logs.sorted(by: { $0 > $1 })
+        guard !sortedDates.isEmpty else { return 0 }
+        
+        var currentStreak = 0
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        var expectedDate = calendar.startOfDay(for: Date())
+        
+        for date in sortedDates {
+            let logDate = calendar.startOfDay(for: date)
+            if logDate == expectedDate || calendar.isDate(logDate, inSameDayAs: expectedDate) {
+                currentStreak += 1
+                expectedDate = calendar.date(byAdding: .day, value: -1, to: expectedDate)!
+            } else if logDate < expectedDate {
+                break
+            }
+        }
+        return currentStreak
     }
 }
