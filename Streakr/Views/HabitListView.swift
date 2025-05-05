@@ -13,7 +13,6 @@ struct HabitListView: View {
     
     
     var body: some View {
-        NavigationView {
             VStack(spacing: 20) {
                 HStack {
                     TextField("New Habit", text: $newHabitTitle)
@@ -29,24 +28,33 @@ struct HabitListView: View {
                     }
                 }
                 .padding()
-                ScrollView {
-                    LazyVStack(spacing: 20) {
-                        ForEach(habitVM.habits) { habit in
-                            HabitCardView(habit: habit) {
+                List {
+                    Section {
+                            ForEach(habitVM.habits) { habit in
+                                HabitCardView(habit: habit) {
+                                    Task {
+                                        await habitVM.logToday(for: habit)
+                                    }
+                                }
+                                .listRowSeparator(.hidden)
+                                .contentShape(Rectangle())
+                            }
+                            .onDelete { indexSet in
                                 Task {
-                                    await habitVM.logToday(for: habit)
+                                    await habitVM.deleteHabit(at: indexSet)
                                 }
                             }
-                        }
+                            .buttonStyle(PlainButtonStyle())
                     }
-                    .padding()
                 }
+                .listStyle(.plain)
+                .background(Color(.systemBackground))
+                
                 .navigationTitle("My Habits")
                 .task {
                     await habitVM.fetchHabits()
                 }
             }
-        }
     }
     
 }

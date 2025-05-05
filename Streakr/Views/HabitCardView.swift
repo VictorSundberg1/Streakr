@@ -28,12 +28,12 @@ struct HabitCardView: View {
             
             
             Button(action: logAction) {
-                Text(hasLoggedToday ? "Done for today!" : "Finished?")
+                Text(hasLoggedToday ? "Done for today!" : "Not done today!")
                     .font(.caption)
                     .padding(6)
                     .frame(maxWidth: .infinity)
-                    .background(hasLoggedToday ? Color.green.opacity(0.6) : Color.blue)
-                    .foregroundStyle(.white)
+                    .background(hasLoggedToday ? Color.green.opacity(0.6) : Color.red.opacity(0.6))
+                    .foregroundStyle(.black)
                     .clipShape(Capsule())
             }
             .disabled(hasLoggedToday)

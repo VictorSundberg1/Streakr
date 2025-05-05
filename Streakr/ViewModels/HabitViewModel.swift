@@ -37,6 +37,7 @@ class HabitViewModel: ObservableObject {
             self.habits = try snapshot.documents.compactMap {
                 try $0.data(as: Habit.self)
             }
+            .sorted(by: { $0.streak > $1.streak})
         } catch {
             print("Error fetching habits: \(error.localizedDescription)")
         }
@@ -94,6 +95,27 @@ class HabitViewModel: ObservableObject {
         }
     
     }
+    
+    func deleteHabit(at offsets: IndexSet) async {
+        guard let userId else { return }
+        
+        for index in offsets {
+            let habit = habits[index]
+            guard let habitId = habit.id else { continue }
+            
+            do {
+                try await db.collection("users")
+                    .document(userId)
+                    .collection("habits")
+                    .document(habitId)
+                    .delete()
+            } catch {
+                print("Failed to delete \(error.localizedDescription)")
+            }
+        }
+        habits.remove(atOffsets: offsets)
+    }
+    
     
     private static func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
