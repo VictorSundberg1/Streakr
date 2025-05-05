@@ -185,6 +185,13 @@ struct InputField: View {
 }
 
 
-#Preview {
-    LoginView()
+//#Preview {
+//    LoginView()
+//}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+            .environmentObject(AuthViewModel())
+    }
 }

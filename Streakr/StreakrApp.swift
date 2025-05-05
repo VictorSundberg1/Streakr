@@ -20,16 +20,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct StreakrApp: App {
     @StateObject private var authVM = AuthViewModel()
+    @StateObject private var habitVM = HabitViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             if authVM.user != nil {
-                ContentView()
+                HomeView()
             } else {
                 LoginView()
             }
         }
         .environmentObject(authVM)
+        .environmentObject(habitVM)
     }
 }
