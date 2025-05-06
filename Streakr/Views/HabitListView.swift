@@ -28,6 +28,7 @@ struct HabitListView: View {
                     }
                 }
                 .padding()
+                
                 List {
                     Section {
                             ForEach(habitVM.habits) { habit in
