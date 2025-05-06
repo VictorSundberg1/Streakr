@@ -10,55 +10,66 @@ import SwiftUI
 struct HabitListView: View {
     @EnvironmentObject var habitVM: HabitViewModel
     @State private var newHabitTitle = ""
+    @State private var selectedHabit: Habit?
+    @State private var showDetailsSheet = false
     
     
     var body: some View {
-            VStack(spacing: 20) {
-                HStack {
-                    TextField("New Habit", text: $newHabitTitle)
-                        .textFieldStyle(.roundedBorder)
-                        .autocorrectionDisabled()
-                    
-                    Button("Add habit") {
-                        Task {
-                            guard !newHabitTitle.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                            await habitVM.addHabit(title: newHabitTitle)
-                            newHabitTitle = ""
-                        }
-                    }
-                }
-                .padding()
+        VStack(spacing: 20) {
+            HStack {
+                TextField("New Habit", text: $newHabitTitle)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled()
                 
-                List {
-                    Section {
-                            ForEach(habitVM.habits) { habit in
-                                HabitCardView(habit: habit) {
-                                    Task {
-                                        await habitVM.logToday(for: habit)
-                                    }
-                                }
-                                .listRowSeparator(.hidden)
-                                .contentShape(Rectangle())
-                            }
-                            .onDelete { indexSet in
-                                Task {
-                                    await habitVM.deleteHabit(at: indexSet)
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
+                Button("Add habit") {
+                    Task {
+                        guard !newHabitTitle.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                        await habitVM.addHabit(title: newHabitTitle)
+                        newHabitTitle = ""
                     }
-                }
-                .listStyle(.plain)
-                .background(Color(.systemBackground))
-                
-                .navigationTitle("My Habits")
-                .task {
-                    await habitVM.fetchHabits()
                 }
             }
+            .padding()
+            
+            List {
+                Section {
+                    ForEach(habitVM.habits) { habit in
+                        HabitCardView(habit: habit) {
+                            Task {
+                                await habitVM.logToday(for: habit)
+                            }
+                        }
+                        .onTapGesture {
+                            selectedHabit = habit
+                            showDetailsSheet = true
+                        }
+                        .listRowSeparator(.hidden)
+                        .contentShape(Rectangle())
+                    }
+                    .onDelete { indexSet in
+                        Task {
+                            await habitVM.deleteHabit(at: indexSet)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .listStyle(.plain)
+            .background(Color(.systemBackground))
+        }
+        .navigationTitle("My Habits")
+        .task {
+            await habitVM.fetchHabits()
+        }
+        .sheet(isPresented: $showDetailsSheet) {
+            if let habit = selectedHabit {
+                HabitDetailsView(habit: habit)
+            }
+        }
     }
-    
 }
+
+
 
 //#Preview {
 //    HabitListView()
