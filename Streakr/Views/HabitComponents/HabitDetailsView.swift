@@ -29,16 +29,9 @@ struct HabitDetailsView: View {
                 }
                 
                 Divider()
+                Spacer()
                 
-                Text("Fulfilled days:")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    ForEach(habit.logs.sorted(by: >), id: \.self) { date in
-                        Text(date.formatted(date: .abbreviated, time: .omitted))
-                            .font(.body)
-                    }
-                }
+                HabitCalendarView(habit: habit)
                 
                 Spacer()
                 

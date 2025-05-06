@@ -11,7 +11,6 @@ struct HabitListView: View {
     @EnvironmentObject var habitVM: HabitViewModel
     @State private var newHabitTitle = ""
     @State private var selectedHabit: Habit?
-    @State private var showDetailsSheet = false
     
     
     var body: some View {
@@ -41,7 +40,6 @@ struct HabitListView: View {
                         }
                         .onTapGesture {
                             selectedHabit = habit
-                            showDetailsSheet = true
                         }
                         .listRowSeparator(.hidden)
                         .contentShape(Rectangle())
@@ -61,10 +59,8 @@ struct HabitListView: View {
         .task {
             await habitVM.fetchHabits()
         }
-        .sheet(isPresented: $showDetailsSheet) {
-            if let habit = selectedHabit {
-                HabitDetailsView(habit: habit)
-            }
+        .sheet(item: $selectedHabit) { habit in
+            HabitDetailsView(habit: habit)
         }
     }
 }
