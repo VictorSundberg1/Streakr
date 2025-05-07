@@ -18,7 +18,7 @@ struct HabitListView: View {
         VStack(spacing: 20) {
             HStack {
                 Text("My Habits")
-                    .font(.title.bold())
+                    .font(.largeTitle.bold())
                 
                 Spacer()
                 
