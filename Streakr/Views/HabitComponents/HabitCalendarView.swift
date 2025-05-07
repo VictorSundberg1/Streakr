@@ -62,11 +62,10 @@ struct HabitCalendarView: View {
         return adjusted >= 0 ? adjusted : adjusted + 7
     }
     
-    //Get a string of the current month and year
+    //Get a string of the current month and year of the users settings language
     private func currentMonthString() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL YYYY"
-        formatter.locale = Locale(identifier: "sv_SE")
+        formatter.dateFormat = "LLLL yyyy"
         return formatter.string(from: Date())
     }
     

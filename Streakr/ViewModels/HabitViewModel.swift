@@ -44,12 +44,14 @@ class HabitViewModel: ObservableObject {
     }
     
     
-    func addHabit(title: String) async {
+    func addHabit(title: String, description: String?, goal: Int?) async {
         guard let userId else { return }
         
         let newHabit = Habit(
             id: nil,
             title: title,
+            description: description,
+            goal: goal,
             createdAt: Date(),
             logs: []
         )

@@ -11,6 +11,8 @@ import FirebaseFirestore
 struct Habit: Identifiable, Codable {
     @DocumentID var id: String?
     var title: String
+    var description: String?
+    var goal: Int?
     var createdAt: Date
     var logs: [Date]
     
