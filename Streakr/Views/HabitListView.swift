@@ -11,21 +11,22 @@ struct HabitListView: View {
     @EnvironmentObject var habitVM: HabitViewModel
     @State private var newHabitTitle = ""
     @State private var selectedHabit: Habit?
+    @State private var showAddHabitSheet = false
     
     
     var body: some View {
         VStack(spacing: 20) {
             HStack {
-                TextField("New Habit", text: $newHabitTitle)
-                    .textFieldStyle(.roundedBorder)
-                    .autocorrectionDisabled()
+                Text("My Habits")
+                    .font(.title.bold())
+                
+                Spacer()
                 
                 Button("Add habit") {
-                    Task {
-                        guard !newHabitTitle.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                        await habitVM.addHabit(title: newHabitTitle)
-                        newHabitTitle = ""
-                    }
+                    showAddHabitSheet = true
+                }
+                .sheet(isPresented: $showAddHabitSheet) {
+                    AddHabitView()
                 }
             }
             .padding()
@@ -55,7 +56,6 @@ struct HabitListView: View {
             .listStyle(.plain)
             .background(Color(.systemBackground))
         }
-        .navigationTitle("My Habits")
         .task {
             await habitVM.fetchHabits()
         }
