@@ -25,6 +25,21 @@ class HabitViewModel: ObservableObject {
         }
     }
     
+    //Returns all streaks from all habits combined
+    func allStreaksTotal() -> Int {
+        habits.map { $0.streak }.reduce(0, +)
+    }
+    
+    //returns number of how many habits have been logged today
+    func loggedToday() -> Int {
+        habits.filter { habit in
+            habit.logs.contains {
+                Calendar.current.isDate($0, inSameDayAs: Date())
+            }
+        }.count
+    }
+    
+    //Checks what user is logged in then gets all the habits from that userId
     func fetchHabits() async {
         guard let userId else { return }
         
@@ -43,7 +58,7 @@ class HabitViewModel: ObservableObject {
         }
     }
     
-    
+    //adds new habit to the userId thats logged in
     func addHabit(title: String, description: String?, goal: Int?) async {
         guard let userId else { return }
         
@@ -71,7 +86,7 @@ class HabitViewModel: ObservableObject {
         }
     }
     
-    
+    //Checks if todays date does not exist in the habits logs, if not then adds today to the logs
     func logToday(for habit: Habit) async {
         guard let userId, let id = habit.id else { return }
         

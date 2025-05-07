@@ -14,6 +14,7 @@ struct AddHabitView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var goal: Double = 30
+    @State private var enableGoal = false
     
     var body: some View {
         NavigationView {
@@ -25,12 +26,17 @@ struct AddHabitView: View {
                     TextEditor(text: $description)
                         .frame(minHeight: 100)
                 }
+                //Toggle to make sure you can create a habit without a goal
                 Section("Goal (days)") {
-                    VStack(alignment: .leading) {
-                        Slider(value: $goal, in: 5...100, step: 1)
-                        Text("Goal: \(Int(goal)) days")
-                            .font(.caption)
-                            .foregroundStyle(.gray)
+                    Toggle("Set goal?", isOn: $enableGoal)
+                    
+                    if enableGoal {
+                        VStack(alignment: .leading) {
+                            Slider(value: $goal, in: 5...100, step: 1)
+                            Text("Goal: \(Int(goal)) days")
+                                .font(.caption)
+                                .foregroundStyle(.gray)
+                        }
                     }
                 }
             }
@@ -39,7 +45,8 @@ struct AddHabitView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         Task {
-                            await habitVM.addHabit(title: title, description: description, goal: Int(goal))
+                            //only sends goal if the goal toggle is on otherwise sends nil
+                            await habitVM.addHabit(title: title, description: description, goal: enableGoal ? Int(goal) : nil)
                             dismiss()
                         }
                     }
