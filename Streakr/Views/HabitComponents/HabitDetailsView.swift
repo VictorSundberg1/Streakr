@@ -18,14 +18,18 @@ struct HabitDetailsView: View {
                 
                 HStack {
                     Text("📅 Created: ")
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Text(habit.createdAt.formatted(date: .abbreviated, time: .omitted))
+                        .foregroundStyle(.primary)
                 }
                 
                 HStack {
                     Text("🔥 Streak: ")
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Text("\(habit.streak) Days!")
+                        .foregroundStyle(.primary)
                 }
                 
                 if let goal = habit.goal, goal > 0 {
@@ -35,12 +39,12 @@ struct HabitDetailsView: View {
                         
                         Text("\(progressPercent(for: habit))%")
                             .font(.caption)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.secondary)
                     }
                     
                     Text("\(habit.streak)/\(goal) days!")
                         .font(.caption)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.secondary)
                 }
             
                 if let description = habit.description, !description.isEmpty {
@@ -48,9 +52,11 @@ struct HabitDetailsView: View {
                     VStack {
                         Text("📝 Description")
                             .font(.headline)
+                            .foregroundStyle(.primary)
                         
                         Text(description)
                             .font(.body)
+                            .foregroundStyle(.secondary)
                         
                     }
                 }
@@ -65,6 +71,7 @@ struct HabitDetailsView: View {
             }
             .padding()
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle("Habit")
         .navigationBarTitleDisplayMode(.inline)
     }

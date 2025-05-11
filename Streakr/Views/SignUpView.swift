@@ -85,7 +85,7 @@ struct SignUpView: View {
     }
     
     private func enableButton() {
-        isSignUpButtonDisabled = email.isEmpty || password.isEmpty || !isEmailValid(email) || confirmPassword.isEmpty || password != confirmPassword
+        isSignUpButtonDisabled = email.isEmpty || password.isEmpty || !isEmailValid(email) || confirmPassword.isEmpty
     }
     
 }
