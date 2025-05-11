@@ -16,16 +16,18 @@ struct HabitCalendarView: View {
         VStack(alignment: .center) {
             Text("\(currentMonthString().capitalized) 📅")
                 .font(.headline)
+                .foregroundStyle(.primary)
                 .padding(.bottom, 5)
             Text("How are you doing this month? 🫣")
                 .font(.subheadline)
                 .padding(.bottom, 15)
+                .foregroundStyle(.secondary)
             
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(weekdays, id: \.self) { day in
                     Text(day)
                         .font(.caption2)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.secondary)
                 }
                 
                 //placeholders for before month has started
@@ -34,7 +36,7 @@ struct HabitCalendarView: View {
                         .frame(width: 32, height: 32)
                 }
                 
-                //shows Days in this month
+                //shows Days in this month and adds colors to the circles if logged, missed or today
                 ForEach(currentMonthDates, id: \.self) { date in
                     let isLogged = habit.logs.contains {
                         calendar.isDate($0, inSameDayAs: date)
@@ -52,6 +54,9 @@ struct HabitCalendarView: View {
                 }
             }
         }
+        .padding()
+        .background(Color(.systemGroupedBackground))
+        .clipShape(.rect(cornerRadius: 12))
     }
     
     //Count for how many weekdays should be skipped before month starts
@@ -86,12 +91,12 @@ struct HabitCalendarView: View {
         calendar.startOfDay(for: date) < calendar.startOfDay(for: Date())
     }
     
-    //Returns the color of each day in the calender
+    //Returns the color of the circle around each day in the calender
     private func circleColor(for date: Date, isLogged: Bool, isMissed: Bool) -> Color {
         if date.isToday { return .blue }
         if isLogged { return .green}
         if isMissed { return .red.opacity(0.4)}
-        return .gray.opacity(0.3)
+        return Color(.systemGray4)
     }
  
     

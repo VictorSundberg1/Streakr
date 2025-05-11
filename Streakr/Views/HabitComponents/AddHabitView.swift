@@ -21,10 +21,12 @@ struct AddHabitView: View {
             Form {
                 Section("Title") {
                     TextField("Enter habit title", text: $title)
+                        .autocorrectionDisabled()
                 }
                 Section("Description") {
                     TextEditor(text: $description)
                         .frame(minHeight: 100)
+                        .autocorrectionDisabled()
                 }
                 //Toggle to make sure you can create a habit without a goal
                 Section("Goal (days)") {

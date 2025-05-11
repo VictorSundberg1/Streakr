@@ -67,21 +67,21 @@ struct LoginView: View {
                     }
                 }
                 
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        
-                        //TODO Återställ lösenord
-                        
-                    }) {
-                        Text("Forgot password?")
-                            .font(.footnote)
-                            .foregroundStyle(Color(.blue).opacity(0.8))
-                            .padding(.vertical, 6)
-                            .contentShape(Rectangle())
-                    }
-                }
-                .padding(.vertical, -10)
+//                HStack {
+//                    Spacer()
+//                    Button(action: {
+//                        
+//                        //TODO Återställ lösenord
+//                        
+//                    }) {
+//                        Text("Forgot password?")
+//                            .font(.footnote)
+//                            .foregroundStyle(Color(.blue).opacity(0.8))
+//                            .padding(.vertical, 6)
+//                            .contentShape(Rectangle())
+//                    }
+//                }
+//                .padding(.vertical, -10)
                 
                 Button(action: {
                     Task {

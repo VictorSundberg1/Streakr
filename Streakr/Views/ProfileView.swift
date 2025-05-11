@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject private var authVM: AuthViewModel
+    //saves darkmode preference in AppStorage / user defaults
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -18,15 +21,19 @@ struct ProfileView: View {
                 Spacer()
             }
             
-            Spacer()
-            
-            Button("Sign out"){
-                authVM.signOut()
+            Form {
+                Section("Appearance") {
+                    Toggle("Dark Mode", isOn: $isDarkMode)
+                }
+                
+                Section {
+                    Button("Sign out"){
+                        authVM.signOut()
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+                }
             }
-            .font(.headline)
-            .foregroundStyle(.red)
-            
-            Divider()
             
             Text("Work in progress")
                 .font(.caption)
@@ -35,6 +42,7 @@ struct ProfileView: View {
             Spacer()
         }
         .padding()
+        .background(Color(.systemGroupedBackground))
     }
 }
 

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    //check for dark/light mode preferense
+    @AppStorage("isDarkMode") private var isDarkMode = false
     var body: some View {
         TabView {
             Tab("Overview", systemImage: "house.fill") {
@@ -22,6 +24,8 @@ struct HomeView: View {
                 ProfileView()
             }
         }
+        //updates the light/darkmode depending on value in isDarkMode
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }
 

@@ -19,6 +19,7 @@ struct HabitListView: View {
             HStack {
                 Text("My Habits")
                     .font(.largeTitle.bold())
+                    .foregroundStyle(.primary)
                 
                 Spacer()
                 
@@ -29,8 +30,10 @@ struct HabitListView: View {
                     AddHabitView()
                 }
             }
-            .padding()
-            
+            .padding(.horizontal)
+            .padding(.top)
+            .background(Color(.systemGroupedBackground))
+                            
             List {
                 Section {
                     ForEach(habitVM.habits) { habit in
@@ -54,7 +57,7 @@ struct HabitListView: View {
                 }
             }
             .listStyle(.plain)
-            .background(Color(.systemBackground))
+            .background(Color(.systemGroupedBackground))
         }
         .task {
             await habitVM.fetchHabits()
@@ -62,6 +65,7 @@ struct HabitListView: View {
         .sheet(item: $selectedHabit) { habit in
             HabitDetailsView(habit: habit)
         }
+        .background(Color(.systemGroupedBackground))
     }
 }
 
