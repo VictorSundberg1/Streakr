@@ -14,7 +14,7 @@ extension Date {
         calendar.date(from: calendar.dateComponents([.year, .month], from: self))!
     }
     
-    //takes in one day of the month and returns list of all the days in the given month
+    //takes in one day of the month and returns list of all the days in the given month in order
     func daysInMonth(using calendar: Calendar = .current) -> [Date] {
         guard let range = calendar.range(of: .day, in: .month, for: self) else { return [] }
         let start = self.startOfMonth(using: calendar)

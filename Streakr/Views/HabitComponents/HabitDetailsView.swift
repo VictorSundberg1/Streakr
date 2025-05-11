@@ -64,6 +64,7 @@ struct HabitDetailsView: View {
                 Divider()
                 Spacer()
                 
+                //Calls for the calenderView to show current month progression
                 HabitCalendarView(habit: habit)
                 
                 Spacer()
@@ -76,6 +77,7 @@ struct HabitDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    //returns percent to show in text form next to the progressbar
     private func progressPercent(for habit: Habit) -> Int {
         guard let goal = habit.goal, goal > 0 else { return 0 }
         let progress = Double(habit.streak) / Double(goal)

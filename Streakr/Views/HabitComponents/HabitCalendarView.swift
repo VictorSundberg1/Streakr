@@ -59,7 +59,7 @@ struct HabitCalendarView: View {
         .clipShape(.rect(cornerRadius: 12))
     }
     
-    //Count for how many weekdays should be skipped before month starts
+    //Count for how many weekdays should be skipped before month starts so the first of the month starts on the correct weekday
     private var leadingEmptyDays: Int {
         let firstDay = currentMonthDates.first!
         let weekday = calendar.component(.weekday, from: firstDay)
@@ -74,12 +74,12 @@ struct HabitCalendarView: View {
         return formatter.string(from: Date())
     }
     
-    //amount of days in current month
+    //gets all of the days in current month with help of extension functions
     private var currentMonthDates: [Date] {
         Date().startOfMonth().daysInMonth()
     }
     
-    //name of weekdays
+    //Get the name of the weekdays then returns it in the correct order of the week
     private var weekdays: [String] {
         let symbols = calendar.shortWeekdaySymbols
         let firstWeekdayIndex = calendar.firstWeekday - 1
@@ -91,7 +91,7 @@ struct HabitCalendarView: View {
         calendar.startOfDay(for: date) < calendar.startOfDay(for: Date())
     }
     
-    //Returns the color of the circle around each day in the calender
+    //Returns the color of the circle around each day in the calender for example logged day = green, missed day = red..
     private func circleColor(for date: Date, isLogged: Bool, isMissed: Bool) -> Color {
         if date.isToday { return .blue }
         if isLogged { return .green}
